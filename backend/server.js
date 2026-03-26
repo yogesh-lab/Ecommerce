@@ -6,6 +6,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import User from "./models/userModel.js"
 
 // Load env vars
 dotenv.config();
@@ -22,6 +23,15 @@ app.use(express.json());
 // Basic Route for testing
 app.get('/', (req, res) => {
   res.send('API is running');
+});
+
+app.get("/test-db", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.use('/api/auth', authRoutes);
